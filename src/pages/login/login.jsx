@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import './css/login.less'
 import logo from "./imgs/logo.png"
 import { Form, Input, Button} from 'antd';
+import {connect} from 'react-redux'
+import {createDemo1Action, createDemo2Action} from '../../redux/action_creators/test_action'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 class Login extends Component {
   handleSubmit =() =>{
     alert('发送请求');
   };
+
+  componentDidMount () {
+    console.log(this.props);
+  }
 
   onFinish = (values) => {
       console.log('Finish:', values);
@@ -75,6 +81,12 @@ class Login extends Component {
     }
 }
 
+export default connect(
+  state => ({test:state.test}),
+  {
+    demo1:createDemo1Action,
+    demo2:createDemo2Action,
+  }
+)(Login)
 
 
-export default Login;

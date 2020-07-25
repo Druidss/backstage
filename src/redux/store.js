@@ -5,3 +5,4 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 
 export default createStore(reducers,composeWithDevTools(applyMiddleware(thunk)))
+
