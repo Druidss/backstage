@@ -1,22 +1,37 @@
 import React, { Component } from 'react';
 import './css/login.less'
 import logo from "./imgs/logo.png"
-import { Form, Input, Button} from 'antd';
-import {connect} from 'react-redux'
-import {createDemo1Action, createDemo2Action} from '../../redux/action_creators/test_action'
+import { Form, Input, Button, message} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
+import {connect} from 'react-redux'
+import {reqLogin} from '../../api'
+import {createDemo1Action, createDemo2Action} from '../../redux/action_creators/test_action'
+
 class Login extends Component {
-  handleSubmit =() =>{
-    alert('发送请求');
-  };
+
 
   componentDidMount () {
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   onFinish = (values) => {
       console.log('Finish:', values);
+      const {username,password} = values;
+
+      reqLogin(username,password)
+      .then((result)=>{
+        const {status,msg,data} = result;
+        if (status === 0){
+          console.log(data);
+        }else{
+          message.warning(msg,1)
+        }
+      })
+    .catch((reason)=>{
+      console.log(reason);
+    })
+
   };
   
     render() {
