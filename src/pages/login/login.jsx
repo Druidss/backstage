@@ -3,10 +3,11 @@ import './css/login.less'
 import logo from "./imgs/logo.png"
 import { Form, Input, Button, message} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Redirect } from 'react-router-dom'
 
 import {connect} from 'react-redux'
 import {reqLogin} from '../../api'
-import {createDemo1Action, createDemo2Action} from '../../redux/action_creators/test_action'
+import {createSaveUserInfoAction} from '../../redux/action_creators/login_action'
 
 class Login extends Component {
 
@@ -22,8 +23,13 @@ class Login extends Component {
       reqLogin(username,password)
       .then((result)=>{
         const {status,msg,data} = result;
+        console.log(result);
         if (status === 0){
           console.log(data);
+          // 将登陆信息交给redux 来管理
+          this.props.saveUerInfo(data);
+          this.props.history.replace('/admin');
+
         }else{
           message.warning(msg,1)
         }
@@ -35,8 +41,11 @@ class Login extends Component {
   };
   
     render() {
+      const {isLogin} = this.props;
+      if (isLogin){
+        return <Redirect to="/admin" />
+      }
         return (
-          
             <div className = "login">
                 <header>
                   <img src={logo} alt=""/>                  
@@ -97,10 +106,9 @@ class Login extends Component {
 }
 
 export default connect(
-  state => ({test:state.test}),
+  state => ({isLogin: state.userInfo.isLogin}),
   {
-    demo1:createDemo1Action,
-    demo2:createDemo2Action,
+    saveUerInfo:createSaveUserInfoAction,
   }
 )(Login)
 
