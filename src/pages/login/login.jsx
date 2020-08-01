@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import './css/login.less'
-import logo from "./imgs/logo.png"
+
 import { Form, Input, Button, message} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom'
@@ -8,6 +7,8 @@ import { Redirect } from 'react-router-dom'
 import {connect} from 'react-redux'
 import {reqLogin} from '../../api'
 import {createSaveUserInfoAction} from '../../redux/action_creators/login_action'
+import './css/login.less'
+import logo from '../../static/imgs/logo.png'
 
 class Login extends Component {
 
@@ -43,7 +44,7 @@ class Login extends Component {
     render() {
       const {isLogin} = this.props;
       if (isLogin){
-        return <Redirect to="/admin" />
+        return <Redirect to="/admin/home" />
       }
         return (
             <div className = "login">

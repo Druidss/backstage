@@ -3,17 +3,20 @@ import './css/header.less'
 import { Modal, Button } from 'antd'
 import screenfull from 'screenfull'
 import dayjs from 'dayjs'
+import {withRouter} from 'react-router-dom'
 
 import {connect} from 'react-redux'
 import {deleteSaveUserInfoAction} from '../../../redux/action_creators/login_action'
 import { FullscreenOutlined,FullscreenExitOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
+import menuList from '../../../config/menu_config'
 const { confirm } = Modal;
 
 
 class Header extends Component {
 	state ={
 		isFull: false,
-		date:dayjs().format('YYYY-MM-DD HH:mm:ss')
+		date:dayjs().format('YYYY-MM-DD HH:mm:ss'),
+		title:''
 	}
 
 	componentDidMount(){
@@ -24,25 +27,44 @@ class Header extends Component {
 		setInterval(() => {
 			this.setState({date:dayjs().format('YYYY-MM-DD HH:mm:ss')})
 		},1000)
+		this.getTitle()
 	}
+
 
 	fullScreen = () => {
 		screenfull.toggle()
 	}
 
 	//点击退出登录的回调
-logOut = () => {
-	let {deleteUserInfo} = this.props
-	confirm({
-		title: '确定退出？',
-		icon: <ExclamationCircleOutlined />,
-		// content: '若退出 需要再次登录',
-		cancelText:'取消',
-		okText:'确认',
-		onOk() {
-			deleteUserInfo()
-		},
-	});
+	logOut = () => {
+		let {deleteUserInfo} = this.props
+		confirm({
+			title: '确定退出？',
+			icon: <ExclamationCircleOutlined />,
+			// content: '若退出 需要再次登录',
+			cancelText:'取消',
+			okText:'确认',
+			onOk() {
+				deleteUserInfo()
+			},
+		});
+		}
+	
+	getTitle = () => {
+		console.log('@@@@@');
+		let pathKey = this.props.location.pathname.split('/').reverse()[0]
+		let title = ''
+		menuList.forEach((item) => {
+			if(item.children instanceof Array){
+				let tmp = item.children.find((citem) => {
+					return citem.key = pathKey
+				})
+				if(tmp) title = tmp.title
+			}else{
+				if(pathKey === item.key) title = item.title
+			}
+		})
+		// this.setState(title)
 	}
 
 
@@ -62,7 +84,7 @@ logOut = () => {
 							</div>
 							<div className="header-bottom">
 								<div className='header-bottom-left'>
-									<span>柱状图</span>
+									<span>{}</span>
 								</div>
 								<div className='header-bottom-right'>
 									{this.state.date}
@@ -80,4 +102,4 @@ export default connect(
 	{
 		deleteUserInfo:deleteSaveUserInfoAction
 	}
-)(Header)
+)(withRouter(Header))

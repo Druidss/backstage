@@ -5,6 +5,7 @@ import { Route, Switch,Redirect} from 'react-router-dom'
 
 import {deleteSaveUserInfoAction} from '../../redux/action_creators/login_action'
 import Header  from './header/Header'
+import LeftNav from './left_nav/left_nav.jsx'
 import Home from '../../components/home/home'
 import Product from '../product/product'
 import Category from '../category/category'
@@ -35,7 +36,9 @@ class Admin extends Component {
         }else{
             return(
 							<Layout className='admin'>
-								<Sider className='sider'>Sider</Sider>
+								<Sider className='sider'>
+                  <LeftNav></LeftNav>
+                </Sider>
 								<Layout>
 									<Header className='header'>Header</Header>
 									<Content className='content'>
