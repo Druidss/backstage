@@ -21,7 +21,7 @@ const { Footer, Sider, Content } = Layout;
 class Admin extends Component {
     
     componentDidMount(){
-        console.log(this.props);
+        // console.log(this.props);
     }
 
     logout = () => {

@@ -33,6 +33,7 @@ class Header extends Component {
 
 	fullScreen = () => {
 		screenfull.toggle()
+		console.log(this.props.title);
 	}
 
 	//点击退出登录的回调
@@ -51,20 +52,19 @@ class Header extends Component {
 		}
 	
 	getTitle = () => {
-		console.log('@@@@@');
 		let pathKey = this.props.location.pathname.split('/').reverse()[0]
 		let title = ''
 		menuList.forEach((item) => {
 			if(item.children instanceof Array){
 				let tmp = item.children.find((citem) => {
-					return citem.key = pathKey
+					return citem.key === pathKey
 				})
-				if(tmp) title = tmp.title
+			if(tmp) title = tmp.title
 			}else{
 				if(pathKey === item.key) title = item.title
 			}
 		})
-		// this.setState(title)
+		this.setState({title})
 	}
 
 
@@ -84,7 +84,7 @@ class Header extends Component {
 							</div>
 							<div className="header-bottom">
 								<div className='header-bottom-left'>
-									<span>{}</span>
+									{ this.props.title || this.state.title } 
 								</div>
 								<div className='header-bottom-right'>
 									{this.state.date}
@@ -98,7 +98,10 @@ class Header extends Component {
 }
 
 export default connect(
-	state => ({userInfo: state.userInfo}),
+	state => ({
+		userInfo: state.userInfo,
+		title: state.title
+	}),
 	{
 		deleteUserInfo:deleteSaveUserInfoAction
 	}
