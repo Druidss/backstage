@@ -17,4 +17,5 @@ export const reqAddCategory = (categoryName)=> myAxios.post(`${BASE_URL}/manage/
 //更新商品分类
 export const reqUpdateCategory = (categoryId,categoryName)=> myAxios.post(`${BASE_URL}/manage/category/update`,{categoryId,categoryName})
 
-
+//请求商品分页列表
+export const reqProductList = (pageNum,pageSize)=> myAxios.get(`${BASE_URL}/manage/category/list`,{params:{pageNum,pageSize}})
