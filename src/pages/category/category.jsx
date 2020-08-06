@@ -99,62 +99,62 @@ export default class Category extends Component {
     });
   };
 
-    render() {
-      const dataSource = this.state.categoryList;
-      
-      const columns = [
-        {
-          title: '分类名',
-          dataIndex: 'name',
-          key: 'name',
-        },
-        {
-          title: '操作',
-          key: 'age',
-          render:(item)=>{return <Button type="link" onClick={() => {this.showUpdate(item)}} > 修改分类 </Button>},
-          width:'25%',
-          align:'center',
-        },
-      ];
-        return (
-            <div>
-                <Card 
-                  title="分类管理" 
-                  extra={<Button type="primary" onClick={this.showAdd} ><PlusOutlined />添加</Button>} >
-                 <Table
-                    dataSource={dataSource}
-                    columns={columns}
-                    pagination={{pageSize:PAGE_SIZE,showQuickJumper:true}}
-                    loading={this.state.isLoading}
-                    rowKey="_id" bordered 
-                  />
-                </Card>
-                <Modal
-                  title={this.state.operType === 'add' ? '新增分类' : '修改分类' }
-                  okText="确定"
-                  cancelText="取消"
-                  visible={this.state.visible}
-                  onOk={this.handleOk}
-                  onCancel={this.handleCancel}
+  render() {
+    const dataSource = this.state.categoryList;
+    
+    const columns = [
+      {
+        title: '分类名',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '操作',
+        key: 'age',
+        render:(item)=>{return <Button type="link" onClick={() => {this.showUpdate(item)}} > 修改分类 </Button>},
+        width:'25%',
+        align:'center',
+      },
+    ];
+    return (
+        <div>
+            <Card 
+              title="分类管理" 
+              extra={<Button type="primary" onClick={this.showAdd} ><PlusOutlined />添加</Button>} >
+              <Table
+                dataSource={dataSource}
+                columns={columns}
+                pagination={{pageSize:PAGE_SIZE,showQuickJumper:true}}
+                loading={this.state.isLoading}
+                rowKey="_id" bordered 
+              />
+            </Card>
+            <Modal
+              title={this.state.operType === 'add' ? '新增分类' : '修改分类' }
+              okText="确定"
+              cancelText="取消"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              <Form
+                ref='form'
+                initialValues={{
+                  // categoryName:this.state.modalCurrentValue,
+                }}
+                onFinish={this.onFinish}
+              >
+                <Form.Item
+                  name="categoryName"
+                  rules={[
+                    {required: true, message: '分类名必须输入！'},
+                  ]}
                 >
-                  <Form
-                    ref='form'
-                    initialValues={{
-                      // categoryName:this.state.modalCurrentValue,
-                    }}
-                    onFinish={this.onFinish}
-                  >
-                    <Form.Item
-                      name="categoryName"
-                      rules={[
-                        {required: true, message: '分类名必须输入！'},
-                      ]}
-                    >
-                      <Input  placeholder="请输入分类名称" />
-                    </Form.Item>
-                  </Form>
-                </Modal>
-            </div>
-        )
-    }
+                  <Input  placeholder="请输入分类名称" />
+                </Form.Item>
+              </Form>
+            </Modal>
+        </div>
+    )
+  }
 }
