@@ -41,6 +41,7 @@ class leftNav extends Component {
 
 
   render() {
+    let {pathname} = this.props.location
     return (
       <div>
         <header className="nav-header">
@@ -49,8 +50,9 @@ class leftNav extends Component {
         </header>
         <div>
         <Menu
-          defaultSelectedKeys={this.props.location.pathname.split('/').reverse()[0]}
-          defaultOpenKeys={this.props.location.pathname.split('/').splice(2)}
+          // selectedKeys={pathname.indexOf('product') !== -1 ? 'product' : pathname.split('/').reverse()[0]}
+          selectedKeys={pathname.split('/').reverse()[0]}
+          defaultOpenKeys={pathname.split('/').splice(2)}
           mode="inline"
           theme="dark"
         >
