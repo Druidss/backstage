@@ -8,3 +8,6 @@ export const DELETE_USER_INFO = 'delete_user_info'
 
 //保存头部的标题
 export const SAVE_TITLE = 'save_title'
+
+//保存初始化的 或 搜索的  商品的分页信息
+export const SAVE_PROD_LIST = 'save_prod_list'

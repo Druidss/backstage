@@ -1,8 +1,10 @@
 import {combineReducers} from 'redux'
 import loginReducer from './login.recuder'
-import menuRecuder from './menu_recuder'
+import menuReducder from './menu_recuder'
+import productReducer from './product_recuder'
 
 export default combineReducers({
     userInfo:loginReducer,
-    title:menuRecuder
+    title:menuReducder,
+    productList:productReducer
 })

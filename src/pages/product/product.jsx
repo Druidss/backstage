@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
+import {connect} from 'react-redux'
 import { Card,Button,Select,Input,Table, message } from 'antd'
 import {PlusOutlined} from '@ant-design/icons'
 
 import {reqProductList,reqUpdateProdStatus,reqSearchProductList} from '../../api'
 import {PAGE_SIZE} from '../../config/index'
+import {createSaveProductAction} from '../../redux/action_creators/porduct_action'
 const {Option} = Select;
 
-export default class Product extends Component {
+class Product extends Component {
   
   state ={
     productList:[],
@@ -31,6 +33,7 @@ export default class Product extends Component {
         total: data.total,
         current: data.pageNum
       })
+      this.props.saveProduct(data.list)
     }
     else message.error('获取商品列表失败')
   }
@@ -107,15 +110,15 @@ export default class Product extends Component {
       },
       {
         title: '操作',
-        dataIndex: 'opera',
+        // dataIndex: 'opera',
         key: 'opera',
         align: 'center',
         width:'10%',
-        render: () => {
+        render: (item) => {
           return(
             <div>
               <Button type="link" 
-                onClick={() => {this.props.history.push('/admin/prod_about/product/detail/123')}} 
+                onClick={() => {this.props.history.push(`/admin/prod_about/product/detail/${item._id}`)}} 
               >
               详情</Button><br/>
               <Button type="link" 
@@ -168,3 +171,11 @@ export default class Product extends Component {
     )
   }
 }
+
+
+export default connect(
+  state => ({productList:state.productList}),
+  {
+    saveProduct:createSaveProductAction,
+  }
+)(Product)
