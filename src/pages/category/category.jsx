@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { Card, Button,Table,message,Modal,Input,Form } from 'antd';
 import {PlusOutlined} from '@ant-design/icons'
+import {connect} from 'react-redux'
+import {createSaveCategoryAction} from '../../redux/action_creators/category_action'
 
 import {reqCategoryList,reqAddCategory,reqUpdateCategory} from '../../api'
 import {PAGE_SIZE} from '../../config/index'
 
-export default class Category extends Component {
+class Category extends Component {
 
   state ={
     CategoryList:[], //商品分类列表
@@ -24,7 +26,11 @@ export default class Category extends Component {
     let result = await reqCategoryList()
     this.setState({isLoading:false})
     const {status,data,msg} = result
-    if(status === 0) this.setState({categoryList:data.reverse()})
+    if(status === 0)
+    {
+      this.setState({categoryList:data.reverse()})
+      this.props.saveCategory(data)
+    } 
     else  message.error(msg,1)
   }
 
@@ -158,3 +164,11 @@ export default class Category extends Component {
     )
   }
 }
+
+
+export default connect(
+  state => ({}),
+  {
+    saveCategory:createSaveCategoryAction,
+  }
+)(Category)

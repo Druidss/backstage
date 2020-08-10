@@ -26,4 +26,5 @@ export const reqUpdateProdStatus = (productId,status)=> myAxios.post(`${BASE_URL
 //搜索商品
 export const reqSearchProductList = (pageNum,pageSize,searchType,keyWord)=> myAxios.get(`${BASE_URL}/manage/product/search`,{params:{pageNum,pageSize,[searchType]:keyWord}})
 
-//添加商品
+//根据商品id 获取商品信息
+export const reqProductById = (productId)=> myAxios.get(`${BASE_URL}/manage/product/info`,{params:{productId}})

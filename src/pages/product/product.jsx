@@ -16,6 +16,7 @@ class Product extends Component {
     current:1,
     keyWord:'', //搜索关键字
     searchType:'productName',//搜索类型
+    isLoading:true,
   }
 
   getProductList = async(number=1) => {
@@ -28,6 +29,7 @@ class Product extends Component {
     }
     const {status,data} = result
     if(status === 0){
+      this.setState({isLoading:false})
       this.setState({
         productList: data.list,
         total: data.total,
@@ -153,6 +155,7 @@ class Product extends Component {
               type="primary" 
               onClick={() => {this.props.history.push('/admin/prod_about/product/add_update')}}
             ><PlusOutlined />添加商品</Button>} 
+            loading={this.state.isLoading}
           >
             <Table 
               dataSource={dataSource} 
