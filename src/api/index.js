@@ -28,3 +28,6 @@ export const reqSearchProductList = (pageNum,pageSize,searchType,keyWord)=> myAx
 
 //根据商品id 获取商品信息
 export const reqProductById = (productId)=> myAxios.get(`${BASE_URL}/manage/product/info`,{params:{productId}})
+
+// 删除图片
+export const reqDeletePicture = (name)=> myAxios.post(`${BASE_URL}/manage/img/delete`,{name})

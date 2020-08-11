@@ -1,8 +1,37 @@
 import React, { Component } from 'react'
-import { Button,Card,Form,Input } from 'antd'
+import {connect} from 'react-redux' 
+import { Button,Card,Form,Input,Select } from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons'
 
-export default class AddUpdate extends Component {
+import PicturesWall from './picture_wall'
+import {reqCategoryList} from '../../api/index'
+const {Option} = Select;
+
+class AddUpdate extends Component {
+
+  state = {
+    categoryList:[]
+  }
+
+
+  getCategoryList = async () => {
+    let result = await reqCategoryList()
+    const { status,data } = result
+    if (status === 0) this.setState({categoryList:data})
+  }
+
+  componentDidMount(){
+    const {categoryList} = this.props
+    if(categoryList) this.setState({categoryList})
+    else this.getCategoryList()
+    console.log(this.refs.pictureWall);
+  }
+
+  onFinish = (values) => {
+    console.log('Finish:', values);
+    console.log(this.refs.pictureWall.getImgArr());
+  }
+
   render() {
     const title = (
       <div>
@@ -20,7 +49,7 @@ export default class AddUpdate extends Component {
         <Form
           ref='form'
           initialValues={{
-            // categoryName:this.state.modalCurrentValue,
+            categoryList:'请选择分类',
           }}
           onFinish={this.onFinish}
           labelCol={{md:2}}
@@ -35,7 +64,7 @@ export default class AddUpdate extends Component {
             <Input  placeholder="请输入商品名称" />
           </Form.Item>
           <Form.Item label="商品描述"
-            name="categoryName"
+            name="categoryDesc"
             rules={[
               {required: true, message: '商品描述必须输入！'},
             ]}
@@ -43,7 +72,7 @@ export default class AddUpdate extends Component {
             <Input  placeholder="请输入商品描述" />
           </Form.Item>
           <Form.Item label="商品价格"
-            name="categoryName"
+            name="categoryPrice"
             rules={[
               {required: true, message: '商品价格必须输入！'},
             ]}
@@ -56,28 +85,30 @@ export default class AddUpdate extends Component {
             />
           </Form.Item>
           <Form.Item label="商品分类"
-            name="categoryName"
+            name="categoryList"
             rules={[
               {required: true, message: '分类名必须输入！'},
             ]}
           >
-            <Input  placeholder="请输入分类名称" />
+            <Select >
+              <Option >请选择分类</Option>
+              {
+                this.state.categoryList.map((item) => {
+                return <Option value={item._id} key={item._id} > {item.name} </Option>
+                })
+              }
+            </Select>
           </Form.Item>
           <Form.Item label="商品图片"
-            name="categoryName"
-            rules={[
-              {required: true, message: '分类名必须输入！'},
-            ]}
+            name="categoryPic"
+            wrapperCol={{md:10}}
           >
-            <Input  placeholder="请输入分类名称" />
+           <PicturesWall ref='pictureWall' />
           </Form.Item>
           <Form.Item label="商品详情"
-            name="categoryName"
-            rules={[
-              {required: true, message: '分类名必须输入！'},
-            ]}
+            name="categoryDetail;"
           >
-            <Input  placeholder="请输入分类名称" />
+            此处为富文本编辑器
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">提交</Button>
         </Form>
@@ -86,3 +117,10 @@ export default class AddUpdate extends Component {
     )
   }
 }
+
+
+export default connect(
+  state => ({
+    categoryList:state.categoryList,
+  }),
+)(AddUpdate)
