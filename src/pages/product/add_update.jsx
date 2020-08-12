@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux' 
-import { Button,Card,Form,Input,Select } from 'antd'
+import { Button,Card,Form,Input,Select, message } from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons'
+import RichTextEditor from './rich_text_editor'
 
 import PicturesWall from './picture_wall'
-import {reqCategoryList} from '../../api/index'
+import {reqCategoryList,reqAddProduct} from '../../api/index'
 const {Option} = Select;
 
 class AddUpdate extends Component {
@@ -12,6 +13,13 @@ class AddUpdate extends Component {
   state = {
     categoryList:[]
   }
+  
+  constructor() {
+    super();
+    this.picRef = React.createRef();
+    this.richText = React.createRef();
+  }
+
 
 
   getCategoryList = async () => {
@@ -24,13 +32,23 @@ class AddUpdate extends Component {
     const {categoryList} = this.props
     if(categoryList) this.setState({categoryList})
     else this.getCategoryList()
-    console.log(this.refs.pictureWall);
   }
 
-  onFinish = (values) => {
-    console.log('Finish:', values);
-    console.log(this.refs.pictureWall.getImgArr());
+  onFinish = async(values) => {
+    let imgs = this.picRef.current.getImgArr()
+    let detail = this.richText.current.getRichText()
+    console.log({...values,imgs,detail});
+    let result = await reqAddProduct({...values,imgs,detail}) 
+    const {status,msg} = result
+    if(status === 0){
+      message.success('添加商品成功')
+      this.props.history.replace('/admin/prod_about/product')
+    }
+    else{
+      message.error(msg)
+    }
   }
+  
 
   render() {
     const title = (
@@ -56,7 +74,7 @@ class AddUpdate extends Component {
           wrapperCol={{md:8}}
         >
           <Form.Item label="商品名称"
-            name="categoryName"
+            name="name"
             rules={[
               {required: true, message: '商品名称必须输入！'},
             ]}
@@ -64,7 +82,7 @@ class AddUpdate extends Component {
             <Input  placeholder="请输入商品名称" />
           </Form.Item>
           <Form.Item label="商品描述"
-            name="categoryDesc"
+            name="desc"
             rules={[
               {required: true, message: '商品描述必须输入！'},
             ]}
@@ -72,7 +90,7 @@ class AddUpdate extends Component {
             <Input  placeholder="请输入商品描述" />
           </Form.Item>
           <Form.Item label="商品价格"
-            name="categoryPrice"
+            name="price"
             rules={[
               {required: true, message: '商品价格必须输入！'},
             ]}
@@ -85,7 +103,7 @@ class AddUpdate extends Component {
             />
           </Form.Item>
           <Form.Item label="商品分类"
-            name="categoryList"
+            name="categoryId"
             rules={[
               {required: true, message: '分类名必须输入！'},
             ]}
@@ -100,15 +118,16 @@ class AddUpdate extends Component {
             </Select>
           </Form.Item>
           <Form.Item label="商品图片"
-            name="categoryPic"
+            // name="categoryPic"
             wrapperCol={{md:10}}
           >
-           <PicturesWall ref='pictureWall' />
+           <PicturesWall ref={this.picRef} />
           </Form.Item>
           <Form.Item label="商品详情"
-            name="categoryDetail;"
+            // name="categoryDetail;"
+            wrapperCol={{md:16}}
           >
-            此处为富文本编辑器
+            <RichTextEditor ref={this.richText} />
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">提交</Button>
         </Form>

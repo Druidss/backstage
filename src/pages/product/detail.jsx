@@ -79,7 +79,7 @@ class Detail extends Component {
             </Item>
             <Item>
               <span className="prod-name" >商品图片</span>
-              <span> 
+              <span className="pic"> 
                 {
                   this.state.imgs.map((item,index) => {
                     return <img  key={index} src={`/upload/` + item} alt ="商品图片" />

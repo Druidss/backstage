@@ -14,15 +14,13 @@ function getBase64(file) {
 }
 
 class PicturesWall extends Component {
+
   state = {
     previewVisible: false,
     previewImage: '',
     previewTitle: '',
     fileList: [],
   };
-  componentDidMount(){
-    console.log('我是照片墙');
-  }
 
   handleCancel = () => this.setState({ previewVisible: false });
 

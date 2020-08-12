@@ -31,3 +31,6 @@ export const reqProductById = (productId)=> myAxios.get(`${BASE_URL}/manage/prod
 
 // 删除图片
 export const reqDeletePicture = (name)=> myAxios.post(`${BASE_URL}/manage/img/delete`,{name})
+
+//添加商品
+export const reqAddProduct = (productObj)=> myAxios.post(`${BASE_URL}/manage/product/add`,{...productObj})
