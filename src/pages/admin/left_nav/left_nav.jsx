@@ -46,7 +46,7 @@ class leftNav extends Component {
       <div>
         <header className="nav-header">
           <img src={logo} alt="" />
-          <h1>商品管理系统</h1>  
+          <h1>私厨管理系统</h1>  
         </header>
         <div>
         <Menu

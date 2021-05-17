@@ -79,9 +79,9 @@ class Header extends Component {
 								<Button size="small" onClick={this.fullScreen}>
 									{isFull
 										?<FullscreenExitOutlined />
-									  :<FullscreenOutlined />}
+									  :<FullscreenOutlined />} 
 								</Button>
-								<span className="username">欢迎, {user} </span>
+								<span className="username">欢迎 </span>
 								<Button type="link" onClick={this.logOut}>退出登录</Button>
 							</div>
 							<div className="header-bottom">

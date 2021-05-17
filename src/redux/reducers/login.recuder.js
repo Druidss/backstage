@@ -1,6 +1,7 @@
 import { SAVE_USER_INFO, DELETE_USER_INFO } from '../action_types'
 
-let user = JSON.parse(localStorage.getItem('user'))
+// let user = JSON.parse(localStorage.getItem('user'))
+let user = 1;
 let token = localStorage.getItem('token')
 
 let initState = {

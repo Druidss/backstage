@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux' 
 import { Button,Card,Form,Input,Select, message } from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons'
-// import RichTextEditor from './rich_text_editor'
 
-import PicturesWall from './picture_wall'
+
 // import {reqCategoryList,reqAddProduct} from '../../api/index'
 import {reqAddDisch} from '../../api/index'
-const {Option} = Select;
+// const {Option} = Select;
 
-class AddUpdate extends Component {
+export default class CehfAddUpdate extends Component {
 
   state = {
     operaType:'add',
@@ -23,24 +22,12 @@ class AddUpdate extends Component {
   }
   
 
-
-
-  // getCategoryList = async () => {
-  //   let result = await reqCategoryList()
-  //   const { status,data } = result
-  //   if (status === 0) this.setState({categoryList:data})
-  // }
-
   componentDidMount(){
-    // const {categoryList} = this.props
-    // if(categoryList) this.setState({categoryList})
-    // else this.getCategoryList()
     const {id} = this.props.match.params;
     console.log(id);
     if(id) {
       this.setState({operaType:'update'})
     }
-
   }
 
   onFinish = async(values) => {
@@ -56,7 +43,6 @@ class AddUpdate extends Component {
     }
   }
   
-
   render() {
     const {operaType} = this.state
     const title = (
@@ -157,7 +143,6 @@ class AddUpdate extends Component {
             wrapperCol={{md:10}}
           >
            <Input  placeholder="请输入菜品图床链接" />
-           <PicturesWall ref={this.picRef} />
           </Form.Item>
           {/* <Form.Item label="菜品详情"
             // name="categoryDetail;"
@@ -174,8 +159,3 @@ class AddUpdate extends Component {
 }
 
 
-export default connect(
-  state => ({
-    categoryList:state.categoryList,
-  }),
-)(AddUpdate)

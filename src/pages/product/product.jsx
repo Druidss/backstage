@@ -3,9 +3,12 @@ import {connect} from 'react-redux'
 import { Card,Button,Select,Input,Table, message } from 'antd'
 import {PlusOutlined} from '@ant-design/icons'
 
-import {reqProductList,reqUpdateProdStatus,reqSearchProductList} from '../../api'
+// import {reqProductList,reqUpdateProdStatus,reqSearchProductList} from '../../api'
+import {reqDischList,reqChangeStatus } from '../../api'
+
 import {PAGE_SIZE} from '../../config/index'
 import {createSaveProductAction} from '../../redux/action_creators/porduct_action'
+// import { FormProvider } from 'antd/lib/form/context'
 const {Option} = Select;
 
 class Product extends Component {
@@ -19,23 +22,28 @@ class Product extends Component {
     isLoading:true,
   }
 
-  getProductList = async(number=1) => {
-    let result
+  getProductList = async(CuisineId=1) => {
+    let res;
     if(this.isSearch){
       const {searchType,keyWord} = this.state 
-      result = await reqSearchProductList(number,PAGE_SIZE,searchType,keyWord)
+      // res = await reqSearchProductList(number,PAGE_SIZE,searchType,keyWord)
+      res = await reqDischList(searchType)
+      if(keyWord){
+        res = await reqDischList(keyWord)
+      }
     }else{
-        result = await reqProductList(number,PAGE_SIZE)
+        res = await reqDischList(CuisineId)
     }
-    const {status,data} = result
-    if(status === 0){
+    const {isSuccess, result, totalCount } = res
+    if(isSuccess){
+      console.log(res);
+      console.log(result);
       this.setState({isLoading:false})
       this.setState({
-        productList: data.list,
-        total: data.total,
-        current: data.pageNum
+        productList: result,
+        total: totalCount,
       })
-      this.props.saveProduct(data.list)
+      this.props.saveProduct(result)
     }
     else message.error('获取商品列表失败')
   }
@@ -44,22 +52,22 @@ class Product extends Component {
     this.getProductList()
   }
 
-  updateProdStatus = async({_id,status}) => {
+  changeDischStatus = async({id,isDeleted}) => {
     let productList = [...this.state.productList]
-    if(status === 1) status =2 
-    else status = 1
-    let result = await reqUpdateProdStatus(_id,status)
-    if(result.status === 0 ){
-      message.success("商品更新成功")
+    if(isDeleted === 0) isDeleted = 1
+    else isDeleted = 0
+    let res = await reqChangeStatus(id,isDeleted)
+    if(res.isSuccess){
+      message.success("菜品状态更新成功",3)
       productList = productList.map((item) => {
-        if(item._id === _id){
-          item.status = status
+        if(item.id === id){
+          item.isDeleted = isDeleted
         }
         return item
       })
       this.setState(productList)
     }
-    else message.error('商品更新失败')
+    else message.error('菜品更新失败')
   }
 
   search = async() => {
@@ -73,39 +81,67 @@ class Product extends Component {
     
     const columns = [
       {
-        title: '商品名称',
-        dataIndex: 'name',
-        key: 'name',
-        width:'18%'
+        title: '菜品名称',
+        dataIndex: 'dishName',
+        key: 'dishName',
+        width:'16%'
       },
       {
-        title: '商品描述',
-        dataIndex: 'desc',
-        key: 'desc',
+        title: '所属厨师id',
+        dataIndex: 'cookId',
+        key: 'cookId',
+        width:'16%'
+      },
+      {
+        title: '菜品星级',
+        dataIndex: 'dishStar',
+        key: 'dishStar',
+        width:'10%',
+        render:(dishStar) => dishStar + '⭐'
+      },
+      {
+        title: '配送时间',
+        dataIndex: 'dishTime',
+        key: 'dishTime',
+        width:'10%'
       },
       {
         title: '价格',
-        dataIndex: 'price',
-        key: 'price',
+        dataIndex: 'dishPrice',
+        key: 'dishPrice',
         align: 'center',
         width:'10%',
-        render:(price) => '￥' + price
+        render:(dishPrice) => '￥' + dishPrice
+      },
+      {
+        title: '菜品图片',
+        dataIndex: 'dishImage',
+        key: 'dishImage',
+        align: 'center',
+        // width:'10%',
+        render:(record) => {
+          return (
+          <div>
+             <img  src={record} alt={record} width="90px" height="90px" /> 
+          </div>
+          )
+        }
       },
       {
         title: '状态',
-        key: 'status',
+        key: 'isDeleted',
         align: 'center',
         width:'10%',
         render: (item) => {
           return (
             <div>
               <Button 
-                type={item.status === 1 ? 'damger' : 'primary'}
-                onClick={() => {this.updateProditem(item)}}
+                type={item.isDeleted === 1 ? 'damger' : 'primary'}
+                onClick={() => {this.changeDischStatus(item)}}
               > 
-                {item.status === 1? '下架':'上架'}
+                {item.isDeleted === 1? '上架':'下架'}
               </Button><br/>
-              <span> {item.status === 1? '在售':'已停售'} </span>
+              <span> {item.isDeleted === 1? '已停售':'在售'} </span>
             </div>
           )
         }
@@ -113,18 +149,18 @@ class Product extends Component {
       {
         title: '操作',
         // dataIndex: 'opera',
-        key: 'opera',
+        key: 'id',
         align: 'center',
         width:'10%',
         render: (item) => {
           return(
             <div>
-              <Button type="link" 
+              {/* <Button type="link" 
                 onClick={() => {this.props.history.push(`/admin/prod_about/product/detail/${item._id}`)}} 
               >
-              详情</Button><br/>
+              详情</Button><br/> */}
               <Button type="link" 
-                onClick={() => {this.props.history.push(`/admin/prod_about/product/add_update/${item._id}`)}}
+                onClick={() => {this.props.history.push(`/admin/prod_about/product/add_update/${item.id}`)}}
               > 
               修改</Button>
             </div>
@@ -138,9 +174,13 @@ class Product extends Component {
           <Card 
             title={
               <div>
-                <Select defaultValue="productName" onChange={(value) => {this.setState({searchType:value})}}>
-                  <Option value="productName" > 按名称搜索</Option>
-                  <Option  value="productDesc" > 按描述搜索</Option>
+                <Select defaultValue="选择菜系" onChange={(value) => {this.setState({searchType:value})}}>
+                  <Option value="1" > 川菜</Option>
+                  <Option  value="2" > 淮扬菜</Option>
+                  <Option  value="3" > 精致西餐</Option>
+                  <Option  value="4" > 粤菜</Option>
+                  <Option  value="5" > 湘菜</Option>
+                  <Option  value="6" > 东北菜</Option>
                 </Select>
                 <Input 
                   style={{margin:'0px 10px',width:'22%'}} 
@@ -154,19 +194,18 @@ class Product extends Component {
             extra={<Button 
               type="primary" 
               onClick={() => {this.props.history.push('/admin/prod_about/product/add_update')}}
-            ><PlusOutlined />添加商品</Button>} 
+            ><PlusOutlined />添加菜品</Button>} 
             loading={this.state.isLoading}
           >
             <Table 
               dataSource={dataSource} 
               columns={columns} 
               bordered
-              rowKey='_id'
+              rowKey='id'
               pagination={{
                 total:this.state.total,
-                current:this.state.current,
+                defaultCurrent:1,
                 pageSize:PAGE_SIZE,
-                onChange:this.getProductList
               }}
             />   
           </Card>

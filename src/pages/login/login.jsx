@@ -5,7 +5,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom'
 
 import {connect} from 'react-redux'
-import {reqLogin} from '../../api'
+import {reqLoginCheck} from '../../api'
 import {createSaveUserInfoAction} from '../../redux/action_creators/login_action'
 import './css/login.less'
 import logo from '../../static/imgs/logo.png'
@@ -19,20 +19,20 @@ class Login extends Component {
 
   onFinish = (values) => {
       console.log('Finish:', values);
-      const {username,password} = values;
+      const {email,password} = values;
 
-      reqLogin(username,password)
-      .then((result)=>{
-        const {status,msg,data} = result;
-        console.log(result);
-        if (status === 0){
-          console.log(data);
+      reqLoginCheck(email,password)
+      .then((res)=>{
+        const {result} = res;
+        console.log(reqLoginCheck);
+        if (res.result){
+          console.log(email);
+          console.log(password);
           // 将登陆信息交给redux 来管理
-          this.props.saveUerInfo(data);
+          this.props.saveUerInfo({userId:1,token:1});
           this.props.history.replace('/admin');
-
         }else{
-          message.warning(msg,1)
+          message.warning('重新检查邮箱和密码',3)
         }
       })
     .catch((reason)=>{
@@ -50,7 +50,7 @@ class Login extends Component {
             <div className = "login">
                 <header>
                   <img src={logo} alt=""/>                  
-                  <h1>商品管理系统</h1>
+                  <h1>私厨管理系统</h1>
                 </header>
 
                 <section>
@@ -64,18 +64,18 @@ class Login extends Component {
                           onFinish={this.onFinish}
                         >
                           <Form.Item
-                            name="username"
+                            name="email"
                             rules={[
                               {
                                 required: true,
-                                message: 'Please input your Username!',
+                                message: 'Please input your Email!',
                               },
-                              {max:12,message:"用户名必须小于等于12位"},
-                              {min:4, message:"用户名必须大于等于4位"},
-                              {pattern:/^\w+$/, message:"用户名必须是字母,数字,下划线"},
+                              // {max:12,message:"用户名必须小于等于12位"},
+                              {min:4, message:"邮箱必须大于等于4位"},
+                              // {pattern:/^\w+$/, message:"用户名必须是字母,数字,下划线"},
                             ]}
                           >
-                            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="email" />
                           </Form.Item>
                           <Form.Item
                             name="password"

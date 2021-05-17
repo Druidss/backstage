@@ -9,7 +9,7 @@ import myAxios from './myAxios'
 import {BASE_URL} from '../config'
 
 //发起登录请求
-export const reqLogin = (username,password)=> myAxios.post(`${BASE_URL}/login`,{username,password})
+// export const reqLogin = (username,password)=> myAxios.post(`${BASE_URL}/login`,{username,password})
 //获取商品列表请求
 export const reqCategoryList = ()=> myAxios.get(`${BASE_URL}/manage/category/list`)
 // 新增商品的分类
@@ -34,3 +34,40 @@ export const reqDeletePicture = (name)=> myAxios.post(`${BASE_URL}/manage/img/de
 
 //添加商品
 export const reqAddProduct = (productObj)=> myAxios.post(`${BASE_URL}/manage/product/add`,{...productObj})
+
+
+// 私家厨房请求
+//登录请求
+export const reqLoginCheck = (email,password)=> myAxios.post(`${BASE_URL}/user/loginCheck`,{email,password})
+
+//Disch
+//根据菜系返回菜系下所有菜品  CuisineId
+export const reqDischList = (CuisineId)=> myAxios.get(`${BASE_URL}/Dish/GetDishByCuisineId`,{params:{CuisineId}})
+// 添加菜品
+export const reqAddDisch = (CuisineInfo)=> myAxios.post(`${BASE_URL}/Dish/AddDish`,{...CuisineInfo})
+//更新菜品图片
+export const reqUpdateImg = (DishId,Img)=> myAxios.post(`${BASE_URL}/Dish/UpdateImg`,{DishId,Img})
+//改变菜品状态
+export const reqChangeStatus = (DishId)=> myAxios.post(`${BASE_URL}/Dish/UpdateImg`,{DishId})
+
+//Chef
+// 获得所有厨师信息
+export const getAllChef = ()=> myAxios.get(`${BASE_URL}/Chef/GetAll`)
+// Chef/GetChefByCuisineId  通过菜系Id获得厨师信息
+export const reqChefList = (CuisineId)=> myAxios.get(`${BASE_URL}/Chef/GetChefByCuisineId`,{params:{CuisineId}})
+// 通过菜品名称获得厨师信息
+export const reqChefbyDishName = (name)=> myAxios.get(`${BASE_URL}/Chef/GetChefByDishName`,{params:{name}})
+//删除厨师
+export const reqDelChef = (chefId)=> myAxios.post(`${BASE_URL}/chef/del`,{chefId})
+
+
+
+
+//Order 
+// 通过用户邮箱获得用户Id
+export const getIdbyEmail = (email)=> myAxios.get(`${BASE_URL}/User/getIdByEmail`,{params:{email}})
+
+// 通过用户ID获得订单
+export const getOrderbyUserId = (userId)=> myAxios.get(`${BASE_URL}/Order/GetOrderByUserId`,{params:{userId}})
+// 异常关闭订单
+export const postColseOder = (orderId)=> myAxios.post(`${BASE_URL}/Order/CloseOrder`,{orderId})
