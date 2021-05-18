@@ -119,7 +119,8 @@ state ={
           return (
             <div>
               <Button 
-                type={item.isClosed === 1 ? 'damger' : 'primary'}
+                type={item.isClosed === 1 ? 'damger' : 'primary' }
+                disabled={item.isClosed === 1 ? true : false}
                 onClick={() => {this.changeOrderStatus(item)}}
               > 
                 {item.isClosed === 1? '已结束':'关闭'}
@@ -158,7 +159,7 @@ state ={
                 pagination={{
                     total:this.state.total,
                     defaultCurrent:1,
-                    defaultPageSize:3,
+                    defaultPageSize:5,
                     hideOnSinglePage:true,
                 }}
                 />   

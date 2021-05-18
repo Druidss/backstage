@@ -12,7 +12,8 @@ import Detail from '../product/detail'
 import AddUpdate from '../product/add_update'
 import Category from '../category/category'
 import User from '../user/user'
-import ChefAddUpdate from '../user/add_chef'
+import ChefAdd from '../user/add_chef'
+import ChefUpdate from '../user/update_chef'
 import Role from '../role/role'
 import Bar from '../bar/bar'
 import Line from '../line/line'
@@ -53,8 +54,8 @@ class Admin extends Component {
 										<Route path="/admin/prod_about/product/add_update" component={AddUpdate} exact/>
 										<Route path="/admin/prod_about/product/add_update/:id" component={AddUpdate}/>
 
-                    <Route path="/admin/user/add_chef" component={ChefAddUpdate} exact />
-										<Route path="/admin/user/add_chef/:id" component={ChefAddUpdate} exact/>
+                    <Route path="/admin/user/add_chef" component={ChefAdd} exact />
+										<Route path="/admin/user/update_chef/:id" component={ChefUpdate} exact/>
                     <Route path="/admin/user" component={User}/>
 									
 										<Route path="/admin/role" component={Role}/>

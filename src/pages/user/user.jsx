@@ -164,7 +164,7 @@ state ={
               >
               详情</Button><br/> */}
               <Button type="link" 
-                onClick={() => {this.props.history.push(`/admin/user/add_chef/${item.id}`)}}
+                onClick={() => {this.props.history.push(`/admin/user/update_chef/${item.id}`)}}
               > 
               修改</Button>
             </div>

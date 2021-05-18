@@ -36,6 +36,12 @@ export const reqDeletePicture = (name)=> myAxios.post(`${BASE_URL}/manage/img/de
 export const reqAddProduct = (productObj)=> myAxios.post(`${BASE_URL}/manage/product/add`,{...productObj})
 
 
+
+
+
+
+
+
 // 私家厨房请求
 //登录请求
 export const reqLoginCheck = (email,password)=> myAxios.post(`${BASE_URL}/user/loginCheck`,{email,password})
@@ -43,12 +49,22 @@ export const reqLoginCheck = (email,password)=> myAxios.post(`${BASE_URL}/user/l
 //Disch
 //根据菜系返回菜系下所有菜品  CuisineId
 export const reqDischList = (CuisineId)=> myAxios.get(`${BASE_URL}/Dish/GetDishByCuisineId`,{params:{CuisineId}})
+// /Dish/GetDishByDishId
+export const getDish = (id)=> myAxios.get(`${BASE_URL}/Dish/GetDishByDishId`,{params:{id}})
+
 // 添加菜品
 export const reqAddDisch = (CuisineInfo)=> myAxios.post(`${BASE_URL}/Dish/AddDish`,{...CuisineInfo})
+//更新菜品
+export const reqUpdateDisch = (CuisineInfo)=> myAxios.post(`${BASE_URL}/Dish/update`,{...CuisineInfo})
+
 //更新菜品图片
 export const reqUpdateImg = (DishId,Img)=> myAxios.post(`${BASE_URL}/Dish/UpdateImg`,{DishId,Img})
 //改变菜品状态
 export const reqChangeStatus = (DishId)=> myAxios.post(`${BASE_URL}/Dish/UpdateImg`,{DishId})
+
+
+
+
 
 //Chef
 // 获得所有厨师信息
@@ -59,15 +75,22 @@ export const reqChefList = (CuisineId)=> myAxios.get(`${BASE_URL}/Chef/GetChefBy
 export const reqChefbyDishName = (name)=> myAxios.get(`${BASE_URL}/Chef/GetChefByDishName`,{params:{name}})
 //删除厨师
 export const reqDelChef = (chefId)=> myAxios.post(`${BASE_URL}/chef/del`,{chefId})
-
-
+// 添加厨师
+export const reqAddChef = (chefInfo)=> myAxios.post(`${BASE_URL}/chef/add`,{...chefInfo})
+// 更新厨师
+export const reqUpdateChef = (updateInfo)=> myAxios.post(`${BASE_URL}/chef/update`,{...updateInfo})
+// 获得单个厨师信息
+export const getChef = (chefId)=> myAxios.get(`${BASE_URL}/Chef/GetChef`,{params:{chefId}})
 
 
 //Order 
 // 通过用户邮箱获得用户Id
 export const getIdbyEmail = (email)=> myAxios.get(`${BASE_URL}/User/getIdByEmail`,{params:{email}})
-
 // 通过用户ID获得订单
 export const getOrderbyUserId = (userId)=> myAxios.get(`${BASE_URL}/Order/GetOrderByUserId`,{params:{userId}})
 // 异常关闭订单
 export const postColseOder = (orderId)=> myAxios.post(`${BASE_URL}/Order/CloseOrder`,{orderId})
+
+
+//Sudo 提权接口
+export const postSudo = (sudoInfo)=> myAxios.post(`${BASE_URL}/User/sudo`,{...sudoInfo})
